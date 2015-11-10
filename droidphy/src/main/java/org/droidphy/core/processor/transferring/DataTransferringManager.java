@@ -20,7 +20,7 @@ import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
 
 import org.droidphy.core.processor.JmDnsServerThreadProcessor;
-import org.droidphy.core.controller.MyApplication;
+import org.droidphy.core.controller.DroidphyApplication;
 import org.droidphy.core.processor.ClientProcessor;
 
 
@@ -136,7 +136,7 @@ public class DataTransferringManager {
 
     private Hashtable<String, String> setSettingsHashTable(Context context) {
         Hashtable<String, String> settings = new Hashtable<>();
-        settings.put(SERVICE_INFO_PROPERTY_DEVICE, ((MyApplication) context.getApplicationContext()).getDeviceId());
+        settings.put(SERVICE_INFO_PROPERTY_DEVICE, ((DroidphyApplication) context.getApplicationContext()).getDeviceId());
         settings.put(SERVICE_INFO_PROPERTY_IP_VERSION, IPUtils.getLocalIpAddress(context));
         return settings;
     }
@@ -173,7 +173,7 @@ public class DataTransferringManager {
             ServiceInfo currentServiceInfo = serviceInfoList[index];
 
             String device = currentServiceInfo.getPropertyString(SERVICE_INFO_PROPERTY_DEVICE);
-            String ownDeviceId = ((MyApplication) context.getApplicationContext()).getDeviceId();
+            String ownDeviceId = ((DroidphyApplication) context.getApplicationContext()).getDeviceId();
 
             if (!device.equals(ownDeviceId)) {
                 String serverIpAddress = getIPv4FromServiceInfo(currentServiceInfo);

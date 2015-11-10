@@ -55,7 +55,7 @@ public class ChatEmulatorFragment extends Fragment implements View.OnClickListen
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                dataTransferringManagerFromApplication = ((MyApplication) getActivity().getApplication()).getDataTransferring();
+                dataTransferringManagerFromApplication = ((DroidphyApplication) getActivity().getApplication()).getDataTransferring();
                 dataTransferringManagerFromApplication.startDataTransferring(getActivity());
 
             }
@@ -89,7 +89,7 @@ public class ChatEmulatorFragment extends Fragment implements View.OnClickListen
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                String deviceId = ((MyApplication) getActivity().getApplication()).getDeviceId();
+                String deviceId = ((DroidphyApplication) getActivity().getApplication()).getDeviceId();
                 final List<String> onlineDevices = dataTransferringManagerFromApplication.getOnlineDevicesList(getActivity(), deviceId);
 
                 getActivity().runOnUiThread(new Runnable() {

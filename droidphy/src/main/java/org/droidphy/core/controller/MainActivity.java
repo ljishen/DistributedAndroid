@@ -17,7 +17,7 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        MyApplication.currentContext = this;
+        DroidphyApplication.currentContext = this;
         attachFragment(new ChatEmulatorFragment());
     }
 

@@ -10,9 +10,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
-import org.droidphy.core.controller.MyApplication;
+import org.droidphy.core.controller.DroidphyApplication;
 import org.droidphy.core.controller.helper.ToastHelper;
 
 public class ClientProcessor {
@@ -66,7 +65,7 @@ public class ClientProcessor {
 
             BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String message = input.readLine();
-            ToastHelper.doInUIThreadShort("Client received : " + message, MyApplication.currentContext);
+            ToastHelper.doInUIThreadShort("Client received : " + message, DroidphyApplication.currentContext);
 
             input.close();
             output.close();
@@ -74,7 +73,7 @@ public class ClientProcessor {
 
         } catch (Exception e) {
             e.printStackTrace();
-            ToastHelper.doInUIThreadShort(e.getMessage(), MyApplication.currentContext);
+            ToastHelper.doInUIThreadShort(e.getMessage(), DroidphyApplication.currentContext);
 
         } finally {
             closeSocket(socket);
@@ -90,14 +89,14 @@ public class ClientProcessor {
 
             BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String messageFromClient = input.readLine();
-            ToastHelper.doInUIThreadShort("Received answer : " + messageFromClient, MyApplication.currentContext);
+            ToastHelper.doInUIThreadShort("Received answer : " + messageFromClient, DroidphyApplication.currentContext);
 
             output.close();
             socket.close();
 
         } catch (Exception e) {
             e.printStackTrace();
-            ToastHelper.doInUIThreadShort(e.getMessage(), MyApplication.currentContext);
+            ToastHelper.doInUIThreadShort(e.getMessage(), DroidphyApplication.currentContext);
 
         } finally {
             closeSocket(socket);

@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import org.droidphy.core.controller.MyApplication;
+import org.droidphy.core.controller.DroidphyApplication;
 import org.droidphy.core.controller.helper.ToastHelper;
 
 public class ServerSocketProcessorRunnable implements Runnable {
@@ -87,7 +87,7 @@ public class ServerSocketProcessorRunnable implements Runnable {
 
         String inputLine = inputBufferedReader.readLine();
         if (inputLine != null) {
-            ToastHelper.doInUIThreadShort("Received message : " + inputLine, MyApplication.currentContext);
+            ToastHelper.doInUIThreadShort("Received message : " + inputLine, DroidphyApplication.currentContext);
             outputPrintWriter.println("YOU TEXT ARRIVED. THANKS");
 
         }

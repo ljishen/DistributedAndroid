@@ -7,7 +7,7 @@ import android.telephony.TelephonyManager;
 
 import org.droidphy.core.processor.transferring.DataTransferringManager;
 
-public class MyApplication extends Application {
+public class DroidphyApplication extends Application {
 
     private DataTransferringManager dataTransferring;
     private String deviceId = "";
