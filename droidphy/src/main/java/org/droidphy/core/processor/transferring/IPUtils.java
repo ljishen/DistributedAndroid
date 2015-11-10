@@ -10,13 +10,11 @@ public class IPUtils {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         int ipAddress = wifiInfo.getIpAddress();
-        return intToIp(ipAddress);
-    }
 
-    private static String intToIp(int i) {
-        return ( i & 0xFF) + "." +
-        ((i >> 8 ) & 0xFF) + "." +
-        ((i >> 16 ) & 0xFF) + "." +
-        ((i >> 24 ) & 0xFF );
+        return String.format("%d.%d.%d.%d",
+                (ipAddress & 0xff),
+                (ipAddress >> 8 & 0xff),
+                (ipAddress >> 16 & 0xff),
+                (ipAddress >> 24 & 0xff));
     }
 }

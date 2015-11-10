@@ -8,14 +8,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.androidannotations.annotations.EActivity;
 import org.droidphy.core.R;
 
+@EActivity(R.layout.activity_main)
 public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         DroidphyApplication.currentContext = this;
         attachFragment(new ChatEmulatorFragment());
     }
