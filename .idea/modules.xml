@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/DistributedAndroid.iml" filepath="$PROJECT_DIR$/DistributedAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/droidphy/droidphy.iml" filepath="$PROJECT_DIR$/droidphy/droidphy.iml" />
+    </modules>
+  </component>
+</project>

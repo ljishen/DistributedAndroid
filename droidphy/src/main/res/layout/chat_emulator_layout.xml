@@ -1,0 +1,84 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/rlReceivedMessagesHolder"
+        android:layout_width="match_parent"
+        android:layout_weight="6"
+        android:orientation="horizontal"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btnStartJmDns"
+            android:layout_width="match_parent"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:text="Register JmDns"
+            android:layout_height="match_parent"/>
+
+        <Button
+            android:id="@+id/btnStopJmDns"
+            android:layout_width="match_parent"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:background="@android:color/white"
+            android:text="Unregister JmDns"
+            android:layout_height="match_parent"/>
+
+        <Button
+            android:id="@+id/btnShowDevicesList"
+            android:layout_width="match_parent"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:background="@android:color/white"
+            android:text="Show online devices list"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rlSendMessageArea"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvSendMessHeader"
+            android:layout_width="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="Input text for sending"
+            android:layout_centerInParent="true"
+            android:textSize="16sp"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:text="S E N D"
+            android:layout_height="50dp"/>
+
+        <EditText
+            android:layout_above="@+id/btnSend"
+            android:id="@+id/edtTextForSend"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/tvSendMessHeader"
+            android:layout_height="match_parent"
+
+        />
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>
