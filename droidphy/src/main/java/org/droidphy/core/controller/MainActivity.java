@@ -10,7 +10,6 @@ import android.view.MenuItem;
 
 import org.droidphy.core.R;
 
-
 public class MainActivity extends FragmentActivity {
 
     @Override
