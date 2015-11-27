@@ -7,11 +7,16 @@ buildscript {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     }
 }
+
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
 repositories {
-    jcenter()
+    // For Logger dependency
+    maven { url "https://jitpack.io" }
+
+    // For https://github.com/openhab/jmdns
+    maven { url "http://dl.bintray.com/openhab/mvn" }
 }
 
 android {
@@ -44,9 +49,17 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-v4:23.1.0'
     compile 'com.android.support:appcompat-v7:23.1.0'
-    compile files('libs/jmdns-3.4.2.jar')
+
+    compile 'org.openhab.jmdns:jmdns:3.4.2'
+
+    // AndroidAnnotations - https://github.com/excilys/androidannotations
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
+
+    // Logger - https://github.com/orhanobut/logger
+    compile 'com.github.orhanobut:logger:1.12'
+
+    compile 'com.google.guava:guava-jdk5:17.0'
 }
 
 apt {

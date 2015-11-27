@@ -1,12 +1,64 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-
-    <FrameLayout
-        android:id="@+id/frame"
+    <LinearLayout
+        android:id="@+id/layout_btns"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="90dp">
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btn_register_service"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:layout_weight="1"
+            android:text="Register Service"/>
+
+        <Button
+            android:id="@+id/btn_unregister_service"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:text="Unregister Service"/>
+
+        <Button
+            android:id="@+id/btn_show_peers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:text="Show online devices"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_view_send_message_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_btns"
+        android:text="Input text for sending"
+        android:gravity="center_horizontal"
+        android:textSize="16sp"/>
+
+    <EditText
+        android:id="@+id/edit_text_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/text_view_send_message_hint"
+        android:layout_above="@+id/btn_send"/>
+
+    <Button
+        android:id="@id/btn_send"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:text="S E N D"/>
+
+</RelativeLayout>
