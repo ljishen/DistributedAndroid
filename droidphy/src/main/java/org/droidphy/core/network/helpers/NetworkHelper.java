@@ -22,6 +22,7 @@ public class NetworkHelper {
     private MulticastLock multiCastLock;
 
     public InetAddress getLocalHost() {
+        // Require permission android.permission.ACCESS_WIFI_STATE
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         if (wifiInfo == null) {
             return null;

@@ -88,7 +88,7 @@ public class MessageServer {
 
                 Writer writer = closer.register(
                         new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), Charsets.UTF_8)));
-                Reader r = closer.register(new StringReader("Message Received " + incomeMsg));
+                Reader r = closer.register(new StringReader("Message Received \"" + incomeMsg + "\""));
                 CharStreams.copy(r, writer);
                 writer.flush();
                 socket.shutdownOutput();
