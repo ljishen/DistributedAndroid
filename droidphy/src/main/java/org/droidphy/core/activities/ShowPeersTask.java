@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter;
 import org.androidannotations.annotations.*;
 import org.droidphy.core.network.jmdns.NetworkService;
 
-import java.util.Set;
+import java.util.Collection;
 
 @EBean
 public class ShowPeersTask {
@@ -20,14 +20,14 @@ public class ShowPeersTask {
 
     @Background
     void queryAndShow() {
-        Set<String> peers = networkService.queryPeerIPs();
+        Collection<String> peers = networkService.queryPeerIPs();
         if (peers != null) {
             show(peers);
         }
     }
 
     @UiThread
-    void show(Set<String> peers) {
+    void show(Collection<String> peers) {
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(activity);
         builderSingle.setTitle("Peers");
 

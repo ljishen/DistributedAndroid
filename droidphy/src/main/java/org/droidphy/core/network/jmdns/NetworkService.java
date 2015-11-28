@@ -9,19 +9,21 @@ import org.androidannotations.annotations.EBean;
 import org.droidphy.core.R;
 import org.droidphy.core.network.helpers.NetworkHelper;
 import org.droidphy.core.utils.BroadcastUtil;
+import org.droidphy.core.utils.FileUtil;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+import java.util.UUID;
 
 @EBean(scope = EBean.Scope.Singleton)
 public class NetworkService {
+    private String FILENAME_SERVICE_INSTANCE_NAME = "service_instance_name";
     private String SERVICE_INFO_PROPERTY_HOST_ADDRESS = "HOST_ADDRESS";
 
     @Bean
@@ -36,13 +38,15 @@ public class NetworkService {
     @Bean
     BroadcastUtil broadcastUtil;
 
+    @Bean
+    FileUtil fileUtil;
+
     private String appName;
     private String serviceInfoType;
 
     private ServiceInfo serviceInfo;
 
-    private Set<String> peerIPs;
-    private boolean peerIPsSlack;
+    private Map<String, String> instanceNameToPeerIPs;
 
     private JmDNS jmDNS;
     private boolean serviceRegistered;
@@ -51,7 +55,7 @@ public class NetworkService {
         appName = context.getResources().getString(R.string.app_name);
         serviceInfoType = "_" + appName.toLowerCase() + "._http._tcp.local.";
 
-        peerIPs = new HashSet<>();
+        instanceNameToPeerIPs = new HashMap<>();
     }
 
     private void init() throws IOException {
@@ -63,9 +67,15 @@ public class NetworkService {
         // Require permission android.permission.CHANGE_WIFI_MULTICAST_STATE
         networkHelper.getOrCreateMulticastLock(appName).acquire();
 
+        String serviceInstanceName = fileUtil.read(FILENAME_SERVICE_INSTANCE_NAME);
+        if (serviceInstanceName == null) {
+            serviceInstanceName = UUID.randomUUID().toString();
+            fileUtil.write(serviceInstanceName, FILENAME_SERVICE_INSTANCE_NAME);
+        }
+
         Map<String, String> props = new HashMap<>();
         props.put(SERVICE_INFO_PROPERTY_HOST_ADDRESS, networkHelper.getLocalHostAddress());
-        serviceInfo = ServiceInfo.create(serviceInfoType, appName, 8856, 0, 0, true, props);
+        serviceInfo = ServiceInfo.create(serviceInfoType, serviceInstanceName, 8856, 0, 0, true, props);
 
         try {
             jmDNS = JmDNS.create(networkHelper.getLocalHost(), appName + "-JmDNS.local.");
@@ -76,14 +86,15 @@ public class NetworkService {
 
         jmDNS.addServiceListener(serviceInfoType, new ServiceListener() {
             public void serviceResolved(ServiceEvent event) {
-                String peerIP = addPeerIP(peerIPs, event.getInfo());
+                String peerIP = addPeerIP(instanceNameToPeerIPs, event.getInfo());
                 if (peerIP != null) {
                     Logger.d("ServiceResolved: " + peerIP);
                 }
             }
 
             public void serviceRemoved(ServiceEvent event) {
-                peerIPsSlack = true;
+                String peerIP = instanceNameToPeerIPs.remove(event.getName());
+                Logger.d("ServiceRemoved: " + peerIP);
             }
 
             public void serviceAdded(ServiceEvent event) {
@@ -158,16 +169,12 @@ public class NetworkService {
             return;
         }
 
-        if (peerIPsSlack) {
-            queryPeerIPs();
-        }
-
-        if (peerIPs.isEmpty()) {
+        if (instanceNameToPeerIPs.isEmpty()) {
             broadcastUtil.sendBroadcast("No peer found");
             return;
         }
 
-        for (String ip : peerIPs) {
+        for (String ip : instanceNameToPeerIPs.values()) {
             try {
                 broadcastUtil.sendBroadcast(messageSenderManager.getOrCreate(ip).send(message));
             } catch (IOException e) {
@@ -176,29 +183,28 @@ public class NetworkService {
         }
     }
 
-    public Set<String> queryPeerIPs() {
+    public Collection<String> queryPeerIPs() {
         if (!serviceRegistered) {
             broadcastUtil.sendBroadcast("Please register service first!");
             return null;
         }
 
-        Set<String> newPeerIPs = new HashSet<>();
+        Map<String, String> newInstanceNameToPeerIPs = new HashMap<>();
 
         ServiceInfo[] serviceInfos = jmDNS.list(serviceInfoType);
         for (ServiceInfo info : serviceInfos) {
-            addPeerIP(newPeerIPs, info);
+            addPeerIP(newInstanceNameToPeerIPs, info);
         }
-        peerIPs = newPeerIPs;
-        peerIPsSlack = false;
+        instanceNameToPeerIPs = newInstanceNameToPeerIPs;
 
-        Logger.d("Peer IPs updated: %s", peerIPs);
-        return peerIPs;
+        Logger.d("Peer IPs updated: %s", instanceNameToPeerIPs);
+        return instanceNameToPeerIPs.values();
     }
 
-    private String addPeerIP(Set<String> peerIPs, ServiceInfo info) {
+    private String addPeerIP(Map<String, String> instanceNameToPeerIPs, ServiceInfo info) {
         String hostAddress = info.getPropertyString(SERVICE_INFO_PROPERTY_HOST_ADDRESS);
         if (!hostAddress.equals(networkHelper.getLocalHostAddress())) {
-            peerIPs.add(hostAddress);
+            instanceNameToPeerIPs.put(info.getName(), hostAddress);
             return hostAddress;
         } else {
             return null;
