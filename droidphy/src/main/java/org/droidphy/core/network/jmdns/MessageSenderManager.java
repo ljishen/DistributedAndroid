@@ -5,6 +5,7 @@ import com.google.common.io.CharStreams;
 import com.google.common.io.Closer;
 import com.orhanobut.logger.Logger;
 import org.androidannotations.annotations.EBean;
+import org.droidphy.core.activities.DroidphyApplication;
 
 import java.io.*;
 import java.net.Socket;
@@ -45,14 +46,18 @@ public class MessageSenderManager {
             Closer closer = Closer.create();
             try {
                 Writer writer = closer.register(
-                        new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), Charsets.UTF_8)));
+                        new BufferedWriter(
+                                new OutputStreamWriter(socket.getOutputStream(), Charsets.UTF_8),
+                                DroidphyApplication.BUFFER_SIZE));
                 Reader r = closer.register(new StringReader(message));
                 CharStreams.copy(r, writer);
                 writer.flush();
                 socket.shutdownOutput();
 
                 BufferedReader reader = closer.register(
-                        new BufferedReader(new InputStreamReader(socket.getInputStream(), Charsets.UTF_8)));
+                        new BufferedReader(
+                                new InputStreamReader(socket.getInputStream(), Charsets.UTF_8),
+                                DroidphyApplication.BUFFER_SIZE));
                 return CharStreams.toString(reader);
             } catch (IOException e) {
                 Logger.e(e, "Fail to communicate on Socket[%s]", socket);

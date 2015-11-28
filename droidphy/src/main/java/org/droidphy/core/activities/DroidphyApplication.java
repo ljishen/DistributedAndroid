@@ -6,6 +6,7 @@ import org.androidannotations.annotations.EApplication;
 
 @EApplication
 public class DroidphyApplication extends Application {
+    public static final int BUFFER_SIZE = 8912;
 
     @Override
     public void onCreate() {

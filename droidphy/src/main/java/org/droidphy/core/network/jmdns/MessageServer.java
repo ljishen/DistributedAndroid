@@ -8,6 +8,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.orhanobut.logger.Logger;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
+import org.droidphy.core.activities.DroidphyApplication;
 import org.droidphy.core.utils.BroadcastUtil;
 
 import java.io.*;
@@ -82,12 +83,16 @@ public class MessageServer {
             Closer closer = Closer.create();
             try {
                 BufferedReader reader = closer.register(
-                        new BufferedReader(new InputStreamReader(socket.getInputStream(), Charsets.UTF_8)));
+                        new BufferedReader(
+                                new InputStreamReader(socket.getInputStream(), Charsets.UTF_8),
+                                DroidphyApplication.BUFFER_SIZE));
                 String incomeMsg = CharStreams.toString(reader);
                 new BroadcastUtil(context).sendBroadcast(incomeMsg);
 
                 Writer writer = closer.register(
-                        new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), Charsets.UTF_8)));
+                        new BufferedWriter(
+                                new OutputStreamWriter(socket.getOutputStream(), Charsets.UTF_8),
+                                DroidphyApplication.BUFFER_SIZE));
                 Reader r = closer.register(new StringReader("Message Received \"" + incomeMsg + "\""));
                 CharStreams.copy(r, writer);
                 writer.flush();

@@ -30,10 +30,10 @@ public class NetworkService {
     NetworkHelper networkHelper;
 
     @Bean
-    MessageSenderManager messageSenderManager;
+    MessageServer messageServer;
 
     @Bean
-    MessageServer messageServer;
+    SendToPeerTask sendToPeerTask;
 
     @Bean
     BroadcastUtil broadcastUtil;
@@ -175,11 +175,7 @@ public class NetworkService {
         }
 
         for (String ip : instanceNameToPeerIPs.values()) {
-            try {
-                broadcastUtil.sendBroadcast(messageSenderManager.getOrCreate(ip).send(message));
-            } catch (IOException e) {
-                broadcastUtil.sendBroadcast("Exception on sending message");
-            }
+            sendToPeerTask.send(ip, message);
         }
     }
 
