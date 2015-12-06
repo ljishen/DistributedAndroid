@@ -47,9 +47,13 @@ public class NetworkService {
     private ServiceInfo serviceInfo;
 
     private Map<String, String> instanceNameToPeerIPs;
-
     private JmDNS jmDNS;
-    private boolean serviceRegistered;
+
+    private volatile ServiceStatus status;
+
+    private enum ServiceStatus {
+        REGISTERED, UNREGISTERED, REGISTERING
+    }
 
     public NetworkService(Context context) {
         appName = context.getResources().getString(R.string.app_name);
@@ -80,8 +84,7 @@ public class NetworkService {
         try {
             jmDNS = JmDNS.create(networkHelper.getLocalHost(), appName + "-JmDNS.local.");
         } catch (IOException e) {
-            Logger.e(e, "Unable to create JmDNS");
-            throw e;
+            throw new IOException("Unable to create JmDNS");
         }
 
         jmDNS.addServiceListener(serviceInfoType, new ServiceListener() {
@@ -104,39 +107,37 @@ public class NetworkService {
     }
 
     @Background
-    public void start() {
+    public void registerService() {
+        if (status == ServiceStatus.REGISTERED ||
+                status == ServiceStatus.REGISTERING) {
+            Logger.d("Service registered or registering");
+            return;
+        }
+        status = ServiceStatus.REGISTERING;
+
         try {
             messageServer.start();
 
             init();
             jmDNS.registerService(serviceInfo);
-            serviceRegistered = true;
+            status = ServiceStatus.REGISTERED;
 
             Logger.d("NetworkService registered");
         } catch (IOException e) {
+            status = ServiceStatus.UNREGISTERED;
             Logger.e(e, "Fail to Register Service");
             broadcastUtil.sendBroadcast("Fail to Register Service. Please try again later.");
         }
     }
 
     @Background
-    public void registerService() {
-        if (serviceRegistered) {
-            Logger.d("Service registered: ServiceInfo[%s]", serviceInfo);
-            return;
-        }
-
-        start();
-    }
-
-    @Background
     public void unregisterService() {
-        if (!serviceRegistered) {
+        if (status != ServiceStatus.REGISTERED) {
             return;
         }
 
         jmDNS.unregisterService(serviceInfo);
-        serviceRegistered = false;
+        status = ServiceStatus.UNREGISTERED;
 
         Logger.d("NetworkService unregistered");
     }
@@ -151,6 +152,7 @@ public class NetworkService {
         try {
             if (jmDNS != null) {
                 jmDNS.close();
+                status = ServiceStatus.UNREGISTERED;
                 jmDNS = null;
             }
 
@@ -164,7 +166,7 @@ public class NetworkService {
 
     @Background
     public void sendToPeers(String message) {
-        if (!serviceRegistered) {
+        if (status != ServiceStatus.REGISTERED) {
             broadcastUtil.sendBroadcast("Please register service first!");
             return;
         }
@@ -180,7 +182,7 @@ public class NetworkService {
     }
 
     public Collection<String> queryPeerIPs() {
-        if (!serviceRegistered) {
+        if (status != ServiceStatus.REGISTERED) {
             broadcastUtil.sendBroadcast("Please register service first!");
             return null;
         }

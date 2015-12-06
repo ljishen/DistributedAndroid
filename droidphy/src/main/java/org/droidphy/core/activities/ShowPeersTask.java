@@ -28,6 +28,10 @@ public class ShowPeersTask {
 
     @UiThread
     void show(Collection<String> peers) {
+        if (activity.isFinishing()) {
+            return;
+        }
+
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(activity);
         builderSingle.setTitle("Peers");
 

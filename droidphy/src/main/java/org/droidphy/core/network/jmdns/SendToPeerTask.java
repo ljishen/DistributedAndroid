@@ -1,5 +1,6 @@
 package org.droidphy.core.network.jmdns;
 
+import com.orhanobut.logger.Logger;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
@@ -22,6 +23,7 @@ public class SendToPeerTask {
         try {
             broadcast(messageSenderManager.getOrCreate(ip).send(message));
         } catch (IOException e) {
+            Logger.e(e, "Fail to send message[%s] to IP[%s]", message, ip);
             broadcast("Exception on sending message");
         }
     }

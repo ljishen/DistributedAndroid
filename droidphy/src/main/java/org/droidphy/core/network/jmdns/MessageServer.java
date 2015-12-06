@@ -93,7 +93,7 @@ public class MessageServer {
                         new BufferedWriter(
                                 new OutputStreamWriter(socket.getOutputStream(), Charsets.UTF_8),
                                 DroidphyApplication.BUFFER_SIZE));
-                Reader r = closer.register(new StringReader("Message Received \"" + incomeMsg + "\""));
+                Reader r = closer.register(new StringReader("ACK: Message Received \"" + incomeMsg + "\""));
                 CharStreams.copy(r, writer);
                 writer.flush();
                 socket.shutdownOutput();

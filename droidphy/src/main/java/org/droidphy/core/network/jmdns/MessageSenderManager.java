@@ -8,12 +8,15 @@ import org.androidannotations.annotations.EBean;
 import org.droidphy.core.activities.DroidphyApplication;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
 @EBean(scope = EBean.Scope.Singleton)
 public class MessageSenderManager {
+    private static final int SOCKET_TIMEOUT = 2 * 1000;
+
     private Map<String, MessageSender> senders;
 
     public MessageSenderManager() {
@@ -41,7 +44,9 @@ public class MessageSenderManager {
         }
 
         public String send(String message) throws IOException {
-            Socket socket = new Socket(ip, MessageServer.SERVER_SOCKET_PORT);
+            Socket socket = new Socket();
+            socket.connect(new InetSocketAddress(ip, MessageServer.SERVER_SOCKET_PORT), SOCKET_TIMEOUT);
+            socket.setSoTimeout(SOCKET_TIMEOUT);
 
             Closer closer = Closer.create();
             try {

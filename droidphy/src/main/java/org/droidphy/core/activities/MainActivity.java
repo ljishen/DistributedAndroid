@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        networkService.start();
+        networkService.registerService();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class MainActivity extends Activity {
     }
 
     @Receiver(actions = BroadcastUtil.BROADCAST_RECEIVER_ACTION_TOAST, local = true)
-    void onActionToastMessage(
+    void onActionMessage(
             @Receiver.Extra(BroadcastUtil.BROADCAST_RECEIVER_EXTRA_MSG)
             String message) {
         toastUtil.show(message, Toast.LENGTH_SHORT);
