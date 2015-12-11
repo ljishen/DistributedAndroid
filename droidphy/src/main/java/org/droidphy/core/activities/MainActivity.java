@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-//        raftTestTask.run();
+        raftTestTask.run();
     }
 
     @Override

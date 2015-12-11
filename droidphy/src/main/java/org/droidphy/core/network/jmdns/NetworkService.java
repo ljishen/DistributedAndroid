@@ -164,7 +164,6 @@ public class NetworkService {
         }
     }
 
-    @Background
     public void sendToPeers(String message) {
         if (status != ServiceStatus.REGISTERED) {
             broadcastUtil.sendBroadcast("Please register service first!");
