@@ -50,6 +50,7 @@
     <EditText
         android:id="@+id/edit_text_message"
         android:layout_width="match_parent"
+        android:hint="Message To Be Send"
         android:layout_height="match_parent"
         android:layout_below="@id/text_view_send_message_hint"
         android:layout_above="@+id/btn_send"/>

@@ -1,10 +1,13 @@
 package org.droidphy.core.utils;
 
 import android.content.Context;
+import android.os.Environment;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Closer;
+import com.orhanobut.logger.Logger;
 import org.androidannotations.annotations.EBean;
+import org.droidphy.core.R;
 
 import java.io.*;
 
@@ -46,5 +49,26 @@ public class FileUtil {
         } finally {
             closer.close();
         }
+    }
+
+    public File getWritableDir(String filename) {
+        File file = null;
+
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            file = new File(
+                    Environment.getExternalStorageDirectory() +
+                            "/" + context.getResources().getString(R.string.app_name).toLowerCase(),
+                    filename);
+            if (file.mkdirs()) {
+                Logger.d("Create directory on external storage (" + filename + ")");
+            }
+        }
+
+        if (file == null || !file.exists()) {
+            file = new File(context.getCacheDir(), filename);
+            Logger.d("Create directory on internal storage (" + filename + ")");
+        }
+        return file;
     }
 }

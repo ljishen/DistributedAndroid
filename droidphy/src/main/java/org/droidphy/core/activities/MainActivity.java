@@ -26,10 +26,20 @@ public class MainActivity extends Activity {
     @ViewById(R.id.edit_text_message)
     EditText editTextMessage;
 
+    @NonConfigurationInstance
+    @Bean
+    RaftTestTask raftTestTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         networkService.registerService();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        raftTestTask.run();
     }
 
     @Override
