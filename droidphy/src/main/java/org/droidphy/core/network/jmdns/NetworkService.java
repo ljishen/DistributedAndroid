@@ -16,10 +16,7 @@ import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @EBean(scope = EBean.Scope.Singleton)
 public class NetworkService {
@@ -57,7 +54,7 @@ public class NetworkService {
 
     public NetworkService(Context context) {
         appName = context.getResources().getString(R.string.app_name);
-        serviceInfoType = "_" + appName.toLowerCase() + "._http._tcp.local.";
+        serviceInfoType = "_" + appName.toLowerCase(Locale.US) + "._http._tcp.local.";
 
         instanceNameToPeerIPs = new HashMap<>();
     }

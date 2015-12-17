@@ -58,17 +58,23 @@ public class FileUtil {
         if (Environment.MEDIA_MOUNTED.equals(state)) {
             file = new File(
                     Environment.getExternalStorageDirectory() +
-                            "/" + context.getResources().getString(R.string.app_name).toLowerCase(),
+                            "/" + context.getResources().getString(R.string.app_name),
                     filename);
-            if (file.mkdirs()) {
-                Logger.d("Create directory on external storage (" + filename + ")");
+            if (mkdirs(file)) {
+                Logger.d("Directory '%s' created on external storage", filename);
             }
         }
 
         if (file == null || !file.exists()) {
             file = new File(context.getCacheDir(), filename);
-            Logger.d("Create directory on internal storage (" + filename + ")");
+            if (mkdirs(file)) {
+                Logger.d("Directory '%s' created on internal storage", filename);
+            }
         }
         return file;
+    }
+
+    private boolean mkdirs(File file) {
+        return !file.exists() && file.mkdirs();
     }
 }

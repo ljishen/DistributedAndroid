@@ -23,8 +23,6 @@ import com.google.common.collect.Lists;
 import org.robotninjas.barge.ClusterConfig;
 import org.robotninjas.barge.Replica;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -67,8 +65,7 @@ public class HttpClusterConfig implements ClusterConfig {
      * @return a valid configuration.
      */
     public static
-    @Nonnull
-    ClusterConfig from(@Nonnull HttpReplica local, HttpReplica... remotes) {
+    ClusterConfig from(HttpReplica local, HttpReplica... remotes) {
         return new HttpClusterConfig(local, remotes);
     }
 
@@ -120,7 +117,7 @@ public class HttpClusterConfig implements ClusterConfig {
     private Predicate<Replica> match(final Uri uri) {
         return new Predicate<Replica>() {
             @Override
-            public boolean apply(@Nullable Replica input) {
+            public boolean apply(Replica input) {
                 return input != null && ((HttpReplica) input).match(uri);
             }
         };

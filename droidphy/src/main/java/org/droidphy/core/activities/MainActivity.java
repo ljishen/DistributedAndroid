@@ -34,11 +34,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         networkService.registerService();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         raftTestTask.run();
     }
 

@@ -5,8 +5,8 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.AsyncHttpRequest;
 import com.koushikdutta.async.http.AsyncHttpResponse;
-import org.droidphy.core.network.raft.JSONStringBody;
-import org.droidphy.core.network.raft.Jackson;
+import com.koushikdutta.async.http.body.StringBody;
+import org.droidphy.core.utils.JacksonUtil;
 import org.droidphy.core.utils.Util;
 
 public abstract class SimpleHttp<T> {
@@ -21,26 +21,24 @@ public abstract class SimpleHttp<T> {
                 .encodedPath(path).build();
 
         this.request = request;
-        this.typeClazz = Util.resolveGenericTypeClass(getClass());
+        this.typeClazz = Util.resolveGenericTypeClass(getClass(), 0);
     }
 
     public SettableFuture<T> execute() {
-        AsyncHttpRequest httpRequestrequest = createHttpRequest(uri);
+        AsyncHttpRequest httpRequest = createHttpRequest(uri);
 
-        String jsonRequest = Jackson.serialize(request);
-        if (jsonRequest != null) {
-            httpRequestrequest.setBody(new JSONStringBody(jsonRequest));
-        }
+        String jsonRequest = JacksonUtil.serialize(request);
+        httpRequest.setBody(new StringBody(jsonRequest));
 
         final SettableFuture<T> result = SettableFuture.create();
-        AsyncHttpClient.getDefaultInstance().executeString(httpRequestrequest,
+        AsyncHttpClient.getDefaultInstance().executeString(httpRequest,
                 new AsyncHttpClient.StringCallback() {
             @Override
             public void onCompleted(Exception e, AsyncHttpResponse source, String value) {
                 if (e != null) {
                     result.setException(e);
                 } else {
-                    result.set(Jackson.deserialize(value, typeClazz));
+                    result.set(JacksonUtil.deserialize(value, typeClazz));
                 }
             }
         });

@@ -46,7 +46,7 @@ public class RaftTestTask {
         }
 
         for (Uri uri : uris) {
-            new SimpleHttpPost<Raft.StateType>(uri, "/raft/init", null) {
+            new SimpleHttpPost<Raft.StateType>(uri, "/raft/init", "") {
             }.execute();
         }
 
@@ -77,7 +77,7 @@ public class RaftTestTask {
                         .build());
 
         try {
-            System.out.println(future.get(1, TimeUnit.SECONDS));
+            System.out.println(future.get(120, TimeUnit.SECONDS));
         } catch (InterruptedException e) {
             Logger.e(e, "AppendEntries error");
             throw Throwables.propagate(e);
@@ -110,8 +110,8 @@ public class RaftTestTask {
 
     private boolean isLeader(Uri uri) {
         try {
-            return new SimpleHttpGet<Raft.StateType>(uri, "/raft/state", null) {
-            }.execute().get().equals(Raft.StateType.LEADER);
+            return Raft.StateType.LEADER ==
+                    new SimpleHttpGet<Raft.StateType>(uri, "/raft/state", null) {}.execute().get();
         } catch (InterruptedException e) {
             Logger.e(e, "Check raft state interrupted!");
             throw Throwables.propagate(e);

@@ -17,6 +17,7 @@ package org.droidphy.core.network.raft;
 
 import com.google.common.base.Throwables;
 import com.google.common.net.MediaType;
+import com.google.inject.Singleton;
 import com.koushikdutta.async.http.Headers;
 import com.koushikdutta.async.http.body.AsyncHttpRequestBody;
 import com.koushikdutta.async.http.server.AsyncHttpServer;
@@ -27,11 +28,14 @@ import com.orhanobut.logger.Logger;
 import org.robotninjas.barge.ClusterConfig;
 import org.robotninjas.barge.NotLeaderException;
 import org.robotninjas.barge.api.AppendEntries;
+import org.robotninjas.barge.api.AppendEntriesResponse;
 import org.robotninjas.barge.api.RequestVote;
+import org.robotninjas.barge.api.RequestVoteResponse;
 import org.robotninjas.barge.state.Raft;
 
 import javax.inject.Inject;
 
+@Singleton
 public class ResourceHandler {
 
     private final Raft raft;
@@ -69,9 +73,10 @@ public class ResourceHandler {
 
         // TODO: Add error handler!!
 
-        server.post("/raft/init", new JsonHttpServerRequestCallback<Void>() {
+        server.post("/raft/init",
+                new JsonStringServerRequestCallback<Raft.StateType, Void>() {
             @Override
-            public Object handle(Void aVoid) {
+            public Raft.StateType handle(Void aVoid) {
                 try {
                     return raft.init().get();
                 } catch (Throwable e) {
@@ -80,30 +85,34 @@ public class ResourceHandler {
             }
         });
 
-        server.get("/raft/config", new JsonHttpServerRequestCallback<Void>() {
+        server.get("/raft/config",
+                new JsonStringServerRequestCallback<ClusterConfig, Void>() {
             @Override
-            public Object handle(Void aVoid) {
+            public ClusterConfig handle(Void aVoid) {
                 return clusterConfig;
             }
         });
 
-        server.get("/raft/state", new JsonHttpServerRequestCallback<Void>() {
+        server.get("/raft/state",
+                new JsonStringServerRequestCallback<Raft.StateType, Void>() {
             @Override
-            public Object handle(Void aVoid) {
+            public Raft.StateType handle(Void aVoid) {
                 return raft.type();
             }
         });
 
-        server.post("/raft/vote", new JsonHttpServerRequestCallback<RequestVote>() {
+        server.post("/raft/vote",
+                new JsonStringServerRequestCallback<RequestVoteResponse, RequestVote>() {
             @Override
-            public Object handle(RequestVote requestVote) {
+            public RequestVoteResponse handle(RequestVote requestVote) {
                 return raft.requestVote(requestVote);
             }
         });
 
-        server.post("/raft/entries", new JsonHttpServerRequestCallback<AppendEntries>() {
+        server.post("/raft/entries",
+                new JsonStringServerRequestCallback<AppendEntriesResponse, AppendEntries>() {
             @Override
-            public Object handle(AppendEntries appendEntries) {
+            public AppendEntriesResponse handle(AppendEntries appendEntries) {
                 return raft.appendEntries(appendEntries);
             }
         });

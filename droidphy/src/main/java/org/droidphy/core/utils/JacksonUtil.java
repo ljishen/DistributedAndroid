@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.droidphy.core.network.raft;
+package org.droidphy.core.utils;
 
 import android.net.Uri;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -30,15 +30,17 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.orhanobut.logger.Logger;
+import org.droidphy.core.network.raft.HttpClusterConfig;
+import org.droidphy.core.network.raft.HttpReplica;
 import org.robotninjas.barge.api.*;
 
 import java.io.IOException;
 import java.util.List;
 
 /**
- * Utility methods for configuring Jackson.
+ * Utility methods for configuring JacksonUtil.
  */
-public class Jackson {
+public class JacksonUtil {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().
             registerModule(new SimpleModule("MyModule", new Version(0, 1, 0, null, "org.robotninjas", "barge"))
                     .addDeserializer(RequestVote.class, new RequestVoteDeserializer())
@@ -50,14 +52,10 @@ public class Jackson {
             .setSerializationInclusion(JsonInclude.Include.NON_NULL)
             .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-    private Jackson() {
+    private JacksonUtil() {
     }
 
     public static <V> V deserialize(String content, Class<V> valueType) {
-        if (content == null) {
-            return null;
-        }
-
         try {
             return OBJECT_MAPPER.readValue(content, valueType);
         } catch (IOException e) {
@@ -67,10 +65,6 @@ public class Jackson {
     }
 
     public static String serialize(Object value) {
-        if (value == null) {
-            return null;
-        }
-
         try {
             return OBJECT_MAPPER.writeValueAsString(value);
         } catch (JsonProcessingException e) {
