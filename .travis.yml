@@ -3,7 +3,6 @@ jdk: oraclejdk7
 
 android:
   components:
-    - platform-tools
     - tools
     
     # The BuildTools version used by your project
@@ -11,9 +10,8 @@ android:
 
     # The SDK version used to compile your project
     - android-23
-    
-    # Additional components
-    - extra-android-support
 
 before_install:
   - chmod +x gradlew
+  - echo yes | android update sdk --filter extra-android-support --no-ui --force > /dev/null
+  - echo yes | android update sdk --filter extra-android-m2repository --no-ui --force > /dev/null
