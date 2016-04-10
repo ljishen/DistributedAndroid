@@ -1,4 +1,6 @@
 language: android
+jdk: oraclejdk7
+
 android:
   components:
     # The BuildTools version used by your project
@@ -6,3 +8,6 @@ android:
 
     # The SDK version used to compile your project
     - android-8
+
+before_install:
+  - chmod +x gradlew
