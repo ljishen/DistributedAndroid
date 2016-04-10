@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DistributedAndroid.iml" filepath="$PROJECT_DIR$/DistributedAndroid.iml" />
-      <module fileurl="file://$PROJECT_DIR$/droidphy/droidphy.iml" filepath="$PROJECT_DIR$/droidphy/droidphy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DistributedAndroid.iml" filepath="$PROJECT_DIR$/.idea/modules/DistributedAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/droidphy/droidphy.iml" filepath="$PROJECT_DIR$/.idea/modules/droidphy/droidphy.iml" />
     </modules>
   </component>
 </project>

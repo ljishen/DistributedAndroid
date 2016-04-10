@@ -5,15 +5,9 @@
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="$PROJECT_DIR$/../../../Program Files/Dev/gradle" />
+        <option name="gradleHome" value="$PROJECT_DIR$/../../Program Files/Dev/gradle" />
         <option name="gradleJvm" value="1.8" />
         <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/droidphy" />
-          </set>
-        </option>
-        <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/droidphy" />
