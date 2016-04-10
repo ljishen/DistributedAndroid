@@ -7,7 +7,7 @@ android:
     - build-tools-23.0.2
 
     # The SDK version used to compile your project
-    - android-8
+    - android-23
 
 before_install:
   - chmod +x gradlew
